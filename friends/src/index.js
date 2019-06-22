@@ -1,8 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
+import logger from 'redux-logger';
+import thunk from 'redux-thunk';
 
+import rootReducer from './reducers';
+
+import App from './App';
 import './index.css';
 
 
@@ -16,14 +21,13 @@ const reducer = (state = initialState, action) => {
   return state;
 }
 
-const store = createStore(reducer);
+const store = createStore(reducer, applyMiddleware(thunk, logger));
 
-const App = () => (
+ReactDOM.render(
   <Provider store={store}>
-    <header className="App-header">
-      <h1>Friends App</h1>
-    </header>
-  </Provider>
-)
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
 
 ReactDOM.render(<App />, document.getElementById('root'));
