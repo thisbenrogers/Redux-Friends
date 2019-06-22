@@ -1,33 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from "redux";
-import { Provider } from "react-redux";
-import logger from 'redux-logger';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
-import rootReducer from './reducers';
-
+import reducer from './reducers';
 import App from './App';
-import './index.css';
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const initialState = {
-  stateExists: true
-}
+const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
 
-// TODO refactor reducer into seperate file
-const reducer = (state = initialState, action) => {
-  console.log(state);
-  return state;
-}
-
-const store = createStore(reducer, applyMiddleware(thunk, logger));
-
+const rootElement = document.getElementById('root');
 ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.getElementById('root')
+  rootElement
 );
-
-ReactDOM.render(<App />, document.getElementById('root'));
